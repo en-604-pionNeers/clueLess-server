@@ -3,14 +3,14 @@
 
 ## Quickstart
 
-1. Install [ruby](https://www.ruby-lang.org/en/documentation/installation/).
+1. Install [ruby](https://www.ruby-lang.org/en/documentation/installation/). On Windows dowload [JRuby](http://jruby.org/) instead.
 2. Install [Github GUI](https://desktop.github.com/)
     - Login with user/password
     - Once logged in, click the plus icon in top left corner. 
     - Next select the en-604-pioNeers -> clueLess-server item.
     - Once select, select an area to copy the project on your system.
 3. Open a command line window and navigate to the project folder.
-4. run `ruby -v` from console. Verify the ruby version is installed.
+4. run `ruby -v` or `jruby -v` (on windows) from console. Verify the ruby version is installed.
 5. run
 
     ```bash
