@@ -38,7 +38,7 @@ end
 
 platforms :jruby do # jruby
   # Use java jdbc sqlite3 as the database for Active Record
-  gem 'jdbc-sqlite3'
+  gem 'activerecord-jdbcsqlite3-adapter'
 end
 
 group :development, :test do
