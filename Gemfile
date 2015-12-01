@@ -36,7 +36,7 @@ platforms :ruby do # linux
   gem 'sqlite3'
 end
 
-platforms :ruby do # linux
+platforms :jruby do # jruby
   # Use java jdbc sqlite3 as the database for Active Record
   gem 'jdbc-sqlite3'
 end
