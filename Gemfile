@@ -41,6 +41,11 @@ platforms :jruby do # jruby
   gem 'activerecord-jdbcsqlite3-adapter'
 end
 
+platforms :mingw, :mswin, :jruby do
+  # Require TZ info on java/windows platforms
+  gem 'tzinfo-data', '~> 1.2014.7'
+end
+
 group :development, :test do
     platforms :ruby do # linux
       # Call 'byebug' anywhere in the code to stop execution and get a debugger console
