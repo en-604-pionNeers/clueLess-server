@@ -16,8 +16,7 @@
     ```bash
     gem install bundler
     bundle install
-    rake db:create
-    rake db:migrate
+    rake db:setup
     rake db:seed
     ```
 
