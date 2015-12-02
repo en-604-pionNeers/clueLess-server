@@ -31,26 +31,32 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-platforms :ruby do # linux
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
-end
-
-platforms :jruby do # jruby
-  # Use java jdbc sqlite3 as the database for Active Record
-  gem 'activerecord-jdbcsqlite3-adapter'
-end
+# Build 12 factor apps in production.
+gem 'rails_12factor', group: :production
 
 platforms :mingw, :mswin, :jruby do
   # Require TZ info on java/windows platforms
   gem 'tzinfo-data', '~> 1.2014.7'
 end
 
+platforms :ruby do # linux
+  # Postgres database in production.
+  gem 'pg'
+end
+
+platforms :jruby do # jruby
+  # JDBC Postgres ActiveRecord
+  gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.16'
+end
+
 group :development, :test do
     platforms :ruby do # linux
       # Call 'byebug' anywhere in the code to stop execution and get a debugger console
       gem 'byebug'
+      # Use sqlite3 as the database for Active Record
+      gem 'sqlite3'
     end
+
 end
 
 group :development do
