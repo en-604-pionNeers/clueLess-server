@@ -15,13 +15,19 @@ class GameBoardController < ApplicationController
 
   # Start the game
   def start_game
-
+    $game.game_in_play = true
     render json: { success: true }
   end
 
   # Get the current game board status
   def index
-    puts "Will return a lot of board logic"
+    render json: { board: $game.game_board}
+  end
+
+  def get_player
+    id = params[:id]
+    player = $game.get_player(id)
+    render json: { player: player}
   end
 
   # Get which player is in turn
@@ -30,14 +36,14 @@ class GameBoardController < ApplicationController
     render json: { player: $game.player_in_turn }
   end
 
-  def get_players
-    render json: { players: $game.get_all_players }
+  def players
+    render json: { players: $game.get_players }
   end
 
   def add_player_to_game
     # TODO: Add in correct input to method for adding a player
     $game.add_player
-    render json: { players: $game.get_all_players }
+    render json: { players: $game.get_players }
   end
 
   # Let a player make a move
