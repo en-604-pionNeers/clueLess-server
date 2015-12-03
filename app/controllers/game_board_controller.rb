@@ -15,6 +15,7 @@ class GameBoardController < ApplicationController
 
   # Start the game
   def start_game
+    $game.game_in_play = true
     render json: { success: true }
   end
 
@@ -25,7 +26,8 @@ class GameBoardController < ApplicationController
 
   def get_player
     id = params[:id]
-
+    player = $game.get_player(id)
+    render json: { player: player}
   end
 
   # Get which player is in turn

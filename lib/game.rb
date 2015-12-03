@@ -6,12 +6,14 @@ class Game
   attr_accessor :players
   attr_accessor :solution_set
   attr_accessor :game_board
+  attr_accessor :game_in_play
 
   def initialize
     puts "Creating a new game"
     # TODO: Player logic
     @players = []
     @game_board = Board.new
+    @game_in_play = false
   end
 
   def add_player
