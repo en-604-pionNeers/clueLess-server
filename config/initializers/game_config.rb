@@ -57,3 +57,22 @@ HALLS=[
     'lounge_dining',
     'dining_kitchen'
 ]
+
+WEAPONS=[
+    :candlestick,
+    :poison,
+    :rope,
+    :gloves,
+    :horseshoe,
+    :knife,
+    :lead_pipe
+]
+
+PLAYER_PIECES=[
+    'Ms. Vivienne Scarlet',
+    'Col. Michael Mustard',
+    'Mrs. Blanche White',
+    'Rev. Jonathon Green',
+    'Mrs. Elizabeth Peacock',
+    'Professor Peter Plum'
+]

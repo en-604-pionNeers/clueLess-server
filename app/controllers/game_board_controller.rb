@@ -20,7 +20,7 @@ class GameBoardController < ApplicationController
 
   # Get the current game board status
   def index
-    puts "Will return a lot of board logic"
+    render json: { board: $game.game_board}
   end
 
   def get_player
@@ -34,7 +34,7 @@ class GameBoardController < ApplicationController
     render json: { player: $game.player_in_turn }
   end
 
-  def get_players
+  def players
     render json: { players: $game.get_players }
   end
 

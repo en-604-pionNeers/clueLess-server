@@ -7,6 +7,7 @@ class Room < Location
   def initialize(room)
     @name = room[:name]
     @halls = room[:halls]
+    @player = nil
     @secret_passage = room[:secret_passage]
     @vacant = true
   end
