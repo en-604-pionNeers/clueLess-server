@@ -1,25 +1,38 @@
 require 'player'
+require 'board'
 
 class Game
 
   attr_accessor :players
   attr_accessor :solution_set
+  attr_accessor :game_board
 
   def initialize
     puts "Creating a new game"
+    # TODO: Player logic
     @players = []
+    @game_board = Board.new
   end
 
   def add_player
-    @players.push(Player.new('test!'))
+    # Add player will work differently, doing this
+    # For testing purposes
+    @players.push(Player.new('test!', @players.count))
   end
 
   def get_player_count
     @players.count
   end
 
-  def get_all_players
+  def get_players
     @players
+  end
+
+  # return a particular player
+  def get_player(id)
+    @players.each do |player|
+      return player if player.id == id
+    end
   end
 
   # TODO: Add in player in turn logic
