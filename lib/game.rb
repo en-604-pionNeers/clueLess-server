@@ -16,13 +16,13 @@ class Game
     @game_board = Board.new
     @game_in_play = false
     @available_cards = CardSet.new
-    @solution_set = SolutionSet.new(available_cards)
+    @solution_set = SolutionSet.new(@available_cards)
   end
 
   def add_player
     # Add player will work differently, doing this
     # For testing purposes
-    @players.push(Player.new('test!', @players.count), available_cards)
+    @players.push(Player.new('test!', @players.count), @available_cards)
   end
 
   def get_player_count
