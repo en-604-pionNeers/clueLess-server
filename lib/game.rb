@@ -7,6 +7,7 @@ class Game
   attr_accessor :solution_set
   attr_accessor :game_board
   attr_accessor :game_in_play
+  attr_accessor :available_cards 
 
   def initialize
     puts "Creating a new game"
@@ -14,12 +15,14 @@ class Game
     @players = []
     @game_board = Board.new
     @game_in_play = false
+    @available_cards = CardSet.new
+    @solution_set = SolutionSet.new(available_cards)
   end
 
   def add_player
     # Add player will work differently, doing this
     # For testing purposes
-    @players.push(Player.new('test!', @players.count))
+    @players.push(Player.new('test!', @players.count), available_cards)
   end
 
   def get_player_count
