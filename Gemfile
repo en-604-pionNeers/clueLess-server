@@ -49,13 +49,19 @@ platforms :jruby do # jruby
   gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.16'
 end
 
+
 group :development, :test do
-    platforms :ruby do # linux
-      # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-      gem 'byebug'
-      # Use sqlite3 as the database for Active Record
-      gem 'sqlite3'
-    end
+  platforms :ruby do # linux
+    # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+    gem 'byebug'
+    # Use sqlite3 as the database for Active Record
+    gem 'sqlite3'
+  end
+
+  platforms :jruby do # jruby
+    # JDBC Postgres ActiveRecord
+    gem 'activerecord-jdbcsqlite3-adapter', '~> 1.3.16'
+  end
 
 end
 
