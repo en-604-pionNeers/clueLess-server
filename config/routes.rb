@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   get 'players' => 'game_board#players'
   get 'player/:player_id' => 'game_board#get_player'
   get 'player_in_turn' => 'game_board#get_player_in_turn'
+
+  delete 'game_board' => 'game_board#destroy'
 end

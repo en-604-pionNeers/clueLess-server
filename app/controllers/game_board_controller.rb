@@ -10,7 +10,13 @@ class GameBoardController < ApplicationController
   # Feel free to update this. This was just a starting point
   def create
     $game = Game.new
-    render json: { success: true }
+    render json: { board: $game.game_board}
+  end
+
+  # Remove game board
+  def destroy
+    $game = nil
+    head :no_content
   end
 
   # Start the game
@@ -21,7 +27,11 @@ class GameBoardController < ApplicationController
 
   # Get the current game board status
   def index
-    render json: { board: $game.game_board}
+    if $game
+      render json: { board: $game.game_board}
+    else
+      head :not_found
+    end
   end
 
   def get_player
