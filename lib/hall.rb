@@ -5,6 +5,6 @@ class Hall < Location
   def initialize(name)
     @player=nil
     @name=name
-    @vacant=false
+    @vacant=true
   end
 end
