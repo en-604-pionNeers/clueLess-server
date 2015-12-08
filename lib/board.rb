@@ -19,8 +19,6 @@ class Board
 
   def move_player(player, location_id)
     location_id = Integer(location_id)
-    puts "The location id: #{location_id}"
-    puts "the rooms: #{@rooms[location_id]}"
     if !@rooms[location_id].nil?
       @rooms[Integer(player.location_id)].unoccupy_location unless player.location_id.nil?
       player.location_id = location_id
