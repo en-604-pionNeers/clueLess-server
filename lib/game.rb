@@ -24,7 +24,7 @@ class Game
   def add_player
     # Add player will work differently, doing this
     # For testing purposes
-    @players.push(Player.new('test!', @players.count, @available_cards))
+    @players.push(Player.new('test!', @players.count, @available_cards, 'Ms. Vivienne Scarlet'))
   end
 
   def get_player_count
