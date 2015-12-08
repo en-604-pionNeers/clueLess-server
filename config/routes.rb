@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   get 'player_count' => 'game_board#get_num_player'
   get 'game_board' => 'game_board#index'
-  get 'player' => 'game_board#players'
+  get 'players' => 'game_board#players'
   get 'player/:player_id' => 'game_board#get_player'
   get 'player_in_turn' => 'game_board#get_player_in_turn'
 end

@@ -24,3 +24,30 @@
 7. Navigate in your browser to `http://localhost:3000`
 
 From here forward you only need to run `rails s` unless a change to the database is made. In that case you may need to reset your environment.
+
+
+## REST API Usage
+
+```
+# Create the game
+POST /game_board
+
+# Get the games data
+GET /game_board
+
+# Get players in the game
+GET /players
+
+# GET player by player ID
+GET player/:player_id
+
+# Add a player to the game
+PUT /add_player
+
+# Sets the game in play flag to true.
+POST /start_game
+
+# Get the current player in turn
+GET /player_in_turn
+
+```
