@@ -22,10 +22,6 @@ class Game
   end
 
   def add_player(name, board_piece)
-    puts "the name: #{name}"
-    puts "the board piece: #{board_piece}"
-    # Add player will work differently, doing this
-    # For testing purposes
     @players.push(Player.new(name, @players.count, @available_cards, board_piece))
   end
 
