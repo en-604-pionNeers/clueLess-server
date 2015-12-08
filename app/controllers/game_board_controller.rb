@@ -73,8 +73,12 @@ class GameBoardController < ApplicationController
   def make_move
     player = $game.get_player(params[:player_id])
     puts "The player: #{player}"
-    $game.game_board.move_player(player[0], params[:location_id])
-    render json: { success: true}
+    response = $game.game_board.move_player(player[0], params[:location_id])
+    if response
+      render json: { success: true}
+    else
+      render json: { error: "Room is not vacant. Cannot move player."}, status: 406
+    end
   end
 
   # Get the number of players

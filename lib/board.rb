@@ -20,13 +20,33 @@ class Board
   def move_player(player, location_id)
     location_id = Integer(location_id)
     if !@rooms[location_id].nil?
-      @rooms[Integer(player.location_id)].unoccupy_location unless player.location_id.nil?
-      player.location_id = location_id
-      @rooms[location_id].occupy_location(player)
+      room = @rooms[location_id]
+      if room.vacant
+        unoccupy(player.location_id) unless player.location_id.nil?
+        player.location_id = location_id
+        room.occupy_location(player)
+      else
+        return false
+      end
     else
-      @halls[Integer(player.location_id)].unoccupy_location unless player.location_id.nil?
-      player.location_id = location_id
-      @halls[location_id].occupy_location(player)
+      hall = @halls[location_id]
+      if hall.vacant
+        unoccupy(player.location_id) unless player.location_id.nil?
+        player.location_id = location_id
+        @halls[location_id].occupy_location(player)
+      else
+        return false
+      end
+    end
+    true
+  end
+
+  def unoccupy(location_id)
+    location_id = Integer(location_id)
+    if !@rooms[location_id].nil?
+      @rooms[location_id].unoccupy_location
+    else
+      @halls[location_id].unoccupy_location
     end
   end
 end
