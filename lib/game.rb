@@ -1,5 +1,7 @@
 require 'player'
 require 'board'
+require 'card_set'
+require 'solution_set'
 
 class Game
 

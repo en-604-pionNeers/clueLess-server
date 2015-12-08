@@ -16,8 +16,8 @@ class Player < BoardAction
     @name = name
     @id = id
     @disabled = false;
-    @cards = [{:weapon => cardset.getRandomWeaponCard}, 
-              {:suspect => cardset.getRandomSuspectCard}, 
-              {:room => cardset.getRandomRoomCard}]
+    @cards = [{:weapon => cardset.random_weapon_card},
+              {:suspect => cardset.random_suspect_card},
+              {:room => cardset.random_room_card}]
   end
 end

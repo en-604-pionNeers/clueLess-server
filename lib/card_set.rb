@@ -20,30 +20,29 @@ class CardSet
     
     
     #Initialize a map of each card type.
-    @available_cards = [{:weapons => available_weapons}, 
-                        {:suspects => available_suspects}, 
-                        {:rooms => available_rooms}] 
-    
+    @available_cards = {:weapons => available_weapons,
+                        :suspects => available_suspects,
+                        :rooms => available_rooms}
   end
   
   #Retrieve a random weapon card and remove it from the weapon map
-  def getRandomWeaponCard
-    card = available_cards["weapons"].sample
-    available_cards["weapons"].delete(card)
+  def random_weapon_card
+    card = available_cards[:weapons].sample
+    available_cards[:weapons].delete(card)
     return card
   end
   
   #Retrieve a random suspect card and remove it from the weapon map
-  def getRandomSuspectCard
-    card = available_cards["suspects"].sample
-    available_cards["suspects"].delete(card)
+  def random_suspect_card
+    card = available_cards[:suspects].sample
+    available_cards[:suspects].delete(card)
     return card
   end
   
   #Retrieve a random room card and remove it from the weapon map
-  def getRandomRoomCard
-    card = available_cards["rooms"].sample
-    available_cards["rooms"].delete(card)
+  def random_room_card
+    card = available_cards[:rooms].sample
+    available_cards[:rooms].delete(card)
     return card
   end
 end
