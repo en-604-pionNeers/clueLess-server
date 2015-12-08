@@ -19,6 +19,10 @@ class GameBoardController < ApplicationController
     head :no_content
   end
 
+  def available_cards
+    render json: { available_cards: $game.available_cards }
+  end
+
   # Start the game
   def start_game
     $game.game_in_play = true
@@ -32,6 +36,14 @@ class GameBoardController < ApplicationController
     else
       head :not_found
     end
+  end
+
+  def halls
+    render json: { halls: $game.game_board.halls }
+  end
+
+  def rooms
+    render json: { rooms: $game.game_board.rooms }
   end
 
   def get_player
@@ -52,13 +64,16 @@ class GameBoardController < ApplicationController
 
   def add_player_to_game
     # TODO: Add in correct input to method for adding a player
-    $game.add_player
+    puts "The params: #{params}"
+    $game.add_player(params[:name], params[:board_piece])
     render json: { players: $game.get_players }
   end
 
   # Let a player make a move
   def make_move
-    # TODO add in make move logic
+    player = $game.get_player(params[:player_id])
+    puts "The player: #{player}"
+    $game.game_board.move_player(player[0], params[:location_id])
     render json: { success: true}
   end
 

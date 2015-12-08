@@ -4,7 +4,8 @@ class Room < Location
   attr_accessor :halls
   attr_accessor :secret_passage
 
-  def initialize(room)
+  def initialize(room, id)
+    @id = id
     @name = room[:name]
     @halls = room[:halls]
     @player = nil

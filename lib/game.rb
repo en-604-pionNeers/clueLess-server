@@ -21,10 +21,12 @@ class Game
     @solution_set = SolutionSet.new(@available_cards)
   end
 
-  def add_player
+  def add_player(name, board_piece)
+    puts "the name: #{name}"
+    puts "the board piece: #{board_piece}"
     # Add player will work differently, doing this
     # For testing purposes
-    @players.push(Player.new('test!', @players.count, @available_cards, 'Ms. Vivienne Scarlet'))
+    @players.push(Player.new(name, @players.count, @available_cards, board_piece))
   end
 
   def get_player_count
