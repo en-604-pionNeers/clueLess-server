@@ -7,17 +7,12 @@ class Player < BoardAction
   attr_accessor :id
   attr_accessor :disabled
 
-  # I think we have game_piece set up separately from
-  # Player in our diagrams, not sure it makes sense to do it that way
-  # But feel free to remove it from here
-  attr_accessor :game_piece
-
   def initialize(name, id, cardset)
     @name = name
     @id = id
     @disabled = false;
-    @cards = [{:weapon => cardset.random_weapon_card},
-              {:suspect => cardset.random_suspect_card},
-              {:room => cardset.random_room_card}]
+    @cards = {:weapon => cardset.random_weapon_card,
+              :suspect => cardset.random_suspect_card,
+              :room => cardset.random_room_card}
   end
 end
