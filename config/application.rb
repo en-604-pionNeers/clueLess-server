@@ -27,5 +27,13 @@ module Clueless
       #{config.root}/lib
     )
 
+    # Enable cross origin resource sharing in web browsers.
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options]
+      end
+    end
+
   end
 end

@@ -34,6 +34,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Build 12 factor apps in production.
 gem 'rails_12factor', group: :production
 
+# Enable cross origin resource sharing
+gem 'rack-cors', :require => 'rack/cors'
+
 platforms :mingw, :mswin, :jruby do
   # Require TZ info on java/windows platforms
   gem 'tzinfo-data', '~> 1.2014.7'
