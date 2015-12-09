@@ -14,7 +14,7 @@ class Game
   def initialize
     puts "Creating a new game"
     # TODO: Player logic
-    @players = []
+    @players = {}
     @game_board = Board.new
     @game_in_play = false
     @available_cards = CardSet.new
@@ -22,7 +22,7 @@ class Game
   end
 
   def add_player(name, board_piece)
-    @players.push(Player.new(name, @players.count, @available_cards, board_piece))
+    @players[@players.count] = (Player.new(name, @players.count, @available_cards, board_piece))
   end
 
   def get_player_count
@@ -35,17 +35,28 @@ class Game
 
   # return a particular player
   def get_player(id)
-    @players.each do |player|
-      return player if player.id == id
+    return players[Integer(id)]
+  end
+
+  def update_player_in_turn(id)
+    player = get_player(id)
+    player.player_in_turn = false
+    if @players[Integer(id) + 1]
+      @players[Integer(id) + 1].player_in_turn = true
+    else
+      @players[0].player_in_turn = true
     end
   end
 
   # TODO: Add in player in turn logic
   def player_in_turn
-    @players[0]
+    @players.each do |key, player|
+      return player if player.player_in_turn
+    end
   end
 
   def start_game
-    puts "I will begin the game"
+    @game_in_play = true
+    @players[0].player_in_turn = true
   end
 end

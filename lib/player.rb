@@ -8,6 +8,7 @@ class Player < BoardAction
   attr_accessor :disabled
   attr_accessor :board_piece
   attr_accessor :location_id
+  attr_accessor :player_in_turn
 
   def initialize(name, id, cardset, character_name)
     @name = name
@@ -18,5 +19,6 @@ class Player < BoardAction
               :room => cardset.random_room_card}
     @board_piece = BoardPiece.new(character_name)
     @location_id = nil
+    @player_in_turn = false
   end
 end

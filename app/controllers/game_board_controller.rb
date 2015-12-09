@@ -25,7 +25,7 @@ class GameBoardController < ApplicationController
 
   # Start the game
   def start_game
-    $game.game_in_play = true
+    $game.start_game
     render json: { success: true }
   end
 
@@ -72,12 +72,22 @@ class GameBoardController < ApplicationController
   # Let a player make a move
   def make_move
     player = $game.get_player(params[:player_id])
-    puts "The player: #{player}"
-    response = $game.game_board.move_player(player[0], params[:location_id])
-    if response
+    valid_move = nil
+    error = nil
+    if $game.game_in_play && player.player_in_turn
+      valid_move = $game.game_board.move_player(player, params[:location_id])
+      if valid_move
+        $game.update_player_in_turn(params[:player_id])
+      else
+        error = "Invalid move. Room not available."
+      end
+    else
+      error = "Game is not in play, or it is not the player's turn."
+    end
+    if valid_move
       render json: { success: true}
     else
-      render json: { error: "Room is not vacant. Cannot move player."}, status: 406
+      render json: { error: error}, status: 400
     end
   end
 
