@@ -94,7 +94,27 @@ class GameBoardController < ApplicationController
       render json: { error: error}, status: 400
     end
   end
-
+  
+  def make_accusation
+    player = $game.get_player(params[:player_id])
+    if $game.game_in_play && player.player_in_turn
+      
+      
+      #Render if the player has won or if the player has lost
+      render json: { success: true}
+    end
+  end
+  
+  def make_suggestion
+    player = $game.get_player(params[:player_id])
+    if $game.game_in_play && player.player_in_turn
+      
+      
+      #Render the cards held by other players
+      render json: { success: true}
+    end
+  end
+  
   # Get the number of players
   def get_num_players
     render json: {player_count: $game.get_player_count}
