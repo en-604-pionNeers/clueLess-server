@@ -81,6 +81,7 @@ class GameBoardController < ApplicationController
       valid_move = $game.game_board.move_player(player, params[:location_id])
       if valid_move
         $game.update_player_in_turn(params[:player_id])
+        # TODO ==== ADD *CHECK BOARD LOGIC* FOR WINNER HERE
       else
         error = "Invalid move. Room not available."
       end
