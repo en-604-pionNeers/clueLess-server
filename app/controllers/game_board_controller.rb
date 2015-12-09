@@ -64,9 +64,12 @@ class GameBoardController < ApplicationController
 
   def add_player_to_game
     # TODO: Add in correct input to method for adding a player
-    puts "The params: #{params}"
-    $game.add_player(params[:name], params[:board_piece])
-    render json: { players: $game.get_players }
+    if !$game.game_in_play
+      $game.add_player(params[:name], params[:board_piece])
+      render json: { players: $game.get_players }
+    else
+      render json: { error: "Game play in progress. Cannot add a player."}, status: 400
+    end
   end
 
   # Let a player make a move
