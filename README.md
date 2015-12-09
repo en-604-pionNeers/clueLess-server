@@ -37,6 +37,13 @@ GET /game_board
 
 # Get players in the game
 GET /players
+must pass through json with the following:
+{
+  "name": "<name>",
+  "board_piece": "<board piece>"
+}
+
+Note: can change above to URL parameters. Reach out if that is preferred.
 
 # GET player by player ID
 GET player/:player_id
@@ -49,5 +56,21 @@ POST /start_game
 
 # Get the current player in turn
 GET /player_in_turn
+
+# Get the halls
+GET /hall
+
+# Return the available cards
+GET /cards
+
+# Get the rooms
+GET /rooms
+
+# Get a room
+GET /rooms/:id
+
+# Move a player to a location
+POST /player/:player_id/location/:location_id
+(note for above: independent of room / hall. use IDs specified in game board)
 
 ```

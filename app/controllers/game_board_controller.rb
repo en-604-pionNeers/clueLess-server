@@ -19,9 +19,13 @@ class GameBoardController < ApplicationController
     head :no_content
   end
 
+  def available_cards
+    render json: { available_cards: $game.available_cards }
+  end
+
   # Start the game
   def start_game
-    $game.game_in_play = true
+    $game.start_game
     render json: { success: true }
   end
 
@@ -32,6 +36,14 @@ class GameBoardController < ApplicationController
     else
       head :not_found
     end
+  end
+
+  def halls
+    render json: { halls: $game.game_board.halls }
+  end
+
+  def rooms
+    render json: { rooms: $game.game_board.rooms }
   end
 
   def get_player
@@ -52,14 +64,35 @@ class GameBoardController < ApplicationController
 
   def add_player_to_game
     # TODO: Add in correct input to method for adding a player
-    $game.add_player
-    render json: { players: $game.get_players }
+    if !$game.game_in_play
+      $game.add_player(params[:name], params[:board_piece])
+      render json: { players: $game.get_players }
+    else
+      render json: { error: "Game play in progress. Cannot add a player."}, status: 400
+    end
   end
 
   # Let a player make a move
   def make_move
-    # TODO add in make move logic
-    render json: { success: true}
+    player = $game.get_player(params[:player_id])
+    valid_move = nil
+    error = nil
+    if $game.game_in_play && player.player_in_turn
+      valid_move = $game.game_board.move_player(player, params[:location_id])
+      if valid_move
+        $game.update_player_in_turn(params[:player_id])
+        # TODO ==== ADD *CHECK BOARD LOGIC* FOR WINNER HERE
+      else
+        error = "Invalid move. Room not available."
+      end
+    else
+      error = "Game is not in play, or it is not the player's turn."
+    end
+    if valid_move
+      render json: { success: true}
+    else
+      render json: { error: error}, status: 400
+    end
   end
 
   # Get the number of players
