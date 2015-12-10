@@ -146,10 +146,7 @@ class GameBoardController < ApplicationController
         
         result_cards = []
         p.cards.each do |c|
-          #Why will this not work only for weapons!!!!
-          #result_cards.push("-" + c.name.to_s + "-==-" + weapon.to_s + "-=" + (c.name == weapon).to_s)
-          #returned "rope==rope=false"
-          if (c.name == weapon || c.name == suspect || c.name == room)
+          if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
             result_cards.push(c)  
           end
         end
