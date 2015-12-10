@@ -26,20 +26,11 @@
 From here forward you only need to run `rails s` unless a change to the database is made. In that case you may need to reset your environment.
 
 
-## REST API Usage
+## REST APIs that require a payload.
+
+Take a look at the config/routes file for REST API.
 
 ```
-# Create the game
-POST /game_board
-
-# Get the games data
-GET /game_board
-
-# Get players in the game
-GET /players
-
-# GET player by player ID
-GET players/:player_id
 
 # Add a player to the game
 POST /players
@@ -48,24 +39,6 @@ must pass through json with the following:
   "name": "<name>",
   "board_piece": "<board piece>"
 }
-
-# Sets the game in play flag to true.
-POST /start_game
-
-# Get the current player in turn
-GET /player_in_turn
-
-# Get the halls
-GET /hall
-
-# Return the available cards
-GET /cards
-
-# Get the rooms
-GET /rooms
-
-# Get a room
-GET /rooms/:id
 
 # Move a player to a location
 POST /players/:player_id/move
