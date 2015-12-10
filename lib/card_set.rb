@@ -26,6 +26,13 @@ class CardSet
     @available_cards = {:weapons => available_weapons,
                         :suspects => available_suspects,
                         :rooms => available_rooms}
+
+    @card_list = available_weapons << available_suspects << available_rooms
+  end
+
+  def random_card
+    card = @card_list.sample
+    card.delete
   end
 
   #Retrieve a random weapon card and remove it from the weapon map

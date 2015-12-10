@@ -49,4 +49,12 @@ class Board
       @halls[location_id].unoccupy_location
     end
   end
+
+  def to_json_map
+    {
+      rooms: rooms.collect{|k,v| v},
+      halls: halls.collect{|k,v| v}
+    }
+  end
+
 end

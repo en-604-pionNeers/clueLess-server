@@ -37,19 +37,17 @@ GET /game_board
 
 # Get players in the game
 GET /players
+
+# GET player by player ID
+GET players/:player_id
+
+# Add a player to the game
+POST /players
 must pass through json with the following:
 {
   "name": "<name>",
   "board_piece": "<board piece>"
 }
-
-Note: can change above to URL parameters. Reach out if that is preferred.
-
-# GET player by player ID
-GET player/:player_id
-
-# Add a player to the game
-PUT /add_player
 
 # Sets the game in play flag to true.
 POST /start_game
@@ -70,7 +68,25 @@ GET /rooms
 GET /rooms/:id
 
 # Move a player to a location
-POST /player/:player_id/location/:location_id
+POST /players/:player_id/move
+must pass through json with the following:
+{
+  "location": "<location_id>"
+}
 (note for above: independent of room / hall. use IDs specified in game board)
+
+# The player makes a accusation
+POST /players/:player_id/accuse
+must pass through json with the following:
+{
+  "location": "<location_id>"
+}
+
+# The player makes a suggestion
+POST /players/:player_id/suggest
+must pass through json with the following:
+{
+  "location": "<location_id>"
+}
 
 ```

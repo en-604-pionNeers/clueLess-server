@@ -10,7 +10,7 @@ class GameBoardController < ApplicationController
   # Feel free to update this. This was just a starting point
   def create
     $game = Game.new
-    render json: { board: $game.game_board}
+    render json: $game.game_board.to_json_map
   end
 
   # Remove game board
@@ -20,55 +20,59 @@ class GameBoardController < ApplicationController
   end
 
   def available_cards
-    render json: { available_cards: $game.available_cards }
+    render json: $game.available_cards
   end
 
   # Start the game
   def start_game
     $game.start_game
-    render json: { success: true }
+    render json: {success: true}
   end
 
   # Get the current game board status
   def index
     if $game
-      render json: { board: $game.game_board}
+      render json: [$game.game_board.to_json_map]
     else
-      head :not_found
+      render json: []
     end
   end
 
   def halls
-    render json: { halls: $game.game_board.halls }
+    render json: $game.game_board.halls.collect{|k,v| v}
   end
 
   def rooms
-    render json: { rooms: $game.game_board.rooms }
+    render json: $game.game_board.rooms.collect{|k,v| v}
   end
 
   def get_player
-    id = params[:id]
+    id = params[:player_id]
     player = $game.get_player(id)
-    render json: { player: player}
+    render json: player
+  end
+
+  def get_game
+    id = params[:id]
   end
 
   # Get which player is in turn
   def get_player_in_turn
     puts "Gets the player that's currently in turn"
-    render json: { player: $game.player_in_turn }
+    render json: {player: $game.player_in_turn}
   end
 
   def players
-    render json: { players: $game.get_players }
+    render json: $game.get_players.collect { |k, v| v }
   end
 
   def add_player_to_game
     # TODO: Add in correct input to method for adding a player
     if !$game.game_in_play
       $game.add_player(params[:name], params[:board_piece])
-      render json: { players: $game.get_players }
+      render json: $game.get_players.collect { |k, v| v }
     else
-      render json: { error: "Game play in progress. Cannot add a player."}, status: 400
+      render json: {error: "Game play in progress. Cannot add a player."}, status: 400
     end
   end
 
@@ -89,9 +93,65 @@ class GameBoardController < ApplicationController
       error = "Game is not in play, or it is not the player's turn."
     end
     if valid_move
-      render json: { success: true}
+      render json: {success: true}
     else
-      render json: { error: error}, status: 400
+      render json: {error: error}, status: 400
+    end
+  end
+
+  def make_accusation
+    player = $game.get_player(params[:player_id])
+    weapon = params[:weapon_id]
+    suspect = params[:suspect_id]
+    room = params[:location_id]
+
+    if $game.game_in_play && player.player_in_turn
+      if solution_set.weapon_card.name == weapon &&
+        solution_set.room_card.name == room &&
+        solution_set.suspectn_card.name == suspect
+        #Render if the player has won
+        render json: {success: true}
+        game
+      else
+        player.disabled = true
+        #Render if the player has lost
+        render json: {success: false}
+      end
+    end
+  end
+
+  def make_suggestion
+    player = $game.get_player(params[:player_id])
+    if $game.game_in_play && player.player_in_turn
+      weapon = params[:weapon_id]
+      suspect = params[:suspect_id]
+      room = params[:location_id]
+
+      results = []
+
+      location_id = $game.game_board.rooms.collect(:name == room).first.id
+
+      $game.get_players.each do |p|
+        #If this player is the one that is in the suggestion, move him to the room
+        if p.get_board_piece.name == suspect
+          @game.game_board.move_player(p, location_id)
+        end
+
+        if p.get_cards[:weapon].name == weapon
+          results.push({:player => p, :card => weapon})
+        end
+
+        if p.get_cards[:suspect].name == suspect
+          results.push({:player => p, :card => suspect})
+        end
+
+        if p.get_cards[:room].name == room
+          results.push({:player => p, :card => room})
+        end
+      end
+
+      #Render the cards held by other players
+      render json: results
     end
   end
 
