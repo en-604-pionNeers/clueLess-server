@@ -106,12 +106,17 @@ class GameBoardController < ApplicationController
     room = params[:location_id]
 
     if $game.game_in_play && player.player_in_turn
-      if solution_set.weapon_card.name == weapon &&
-        solution_set.room_card.name == room &&
-        solution_set.suspectn_card.name == suspect
+      
+      puts($game.solution_set.weapon_card.name.to_s)
+      puts($game.solution_set.room_card.name.to_s)
+      puts($game.solution_set.suspect_card.name.to_s)
+      
+      if $game.solution_set.weapon_card.name.to_s == weapon &&
+        $game.solution_set.room_card.name.to_s == room &&
+        $game.solution_set.suspect_card.name.to_s == suspect
         #Render if the player has won
+        $game = nil
         render json: {success: true}
-        game
       else
         player.disabled = true
         #Render if the player has lost
