@@ -69,7 +69,7 @@ class GameBoardController < ApplicationController
   def add_player_to_game
     # TODO: Add in correct input to method for adding a player
     if !$game.game_in_play
-      $game.add_player(params[:name], params[:board_piece])
+      $game.add_player(params[:board_piece])
       render json: $game.get_players.collect { |k, v| v }
     else
       render json: {error: "Game play in progress. Cannot add a player."}, status: 400
@@ -106,12 +106,17 @@ class GameBoardController < ApplicationController
     room = params[:location_id]
 
     if $game.game_in_play && player.player_in_turn
-      if solution_set.weapon_card.name == weapon &&
-        solution_set.room_card.name == room &&
-        solution_set.suspectn_card.name == suspect
+      
+      puts($game.solution_set.weapon_card.name.to_s)
+      puts($game.solution_set.room_card.name.to_s)
+      puts($game.solution_set.suspect_card.name.to_s)
+      
+      if $game.solution_set.weapon_card.name.to_s == weapon &&
+        $game.solution_set.room_card.name.to_s == room &&
+        $game.solution_set.suspect_card.name.to_s == suspect
         #Render if the player has won
+        $game = nil
         render json: {success: true}
-        game
       else
         player.disabled = true
         #Render if the player has lost
@@ -128,25 +133,30 @@ class GameBoardController < ApplicationController
       room = params[:location_id]
 
       results = []
-
-      location_id = $game.game_board.rooms.collect(:name == room).first.id
-
-      $game.get_players.each do |p|
+      
+      location_id = nil
+      
+      $game.game_board.rooms.collect{|k,v| v}.each do |r|
+        if r.name == room
+          location_id = r.id
+          break
+        end
+      end
+      
+      $game.get_players.collect { |k, v| v }.each do |p|
         #If this player is the one that is in the suggestion, move him to the room
-        if p.get_board_piece.name == suspect
-          @game.game_board.move_player(p, location_id)
+        if p.board_piece.name == suspect
+          $game.game_board.move_player(p, location_id)
         end
-
-        if p.get_cards[:weapon].name == weapon
-          results.push({:player => p, :card => weapon})
+        
+        result_cards = []
+        p.cards.each do |c|
+          if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
+            result_cards.push(c)  
+          end
         end
-
-        if p.get_cards[:suspect].name == suspect
-          results.push({:player => p, :card => suspect})
-        end
-
-        if p.get_cards[:room].name == room
-          results.push({:player => p, :card => room})
+        if result_cards.length > 0
+          results.push({:player => p, :cards => result_cards})
         end
       end
 

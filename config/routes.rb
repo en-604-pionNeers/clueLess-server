@@ -22,5 +22,5 @@ Rails.application.routes.draw do
   get 'rooms' => 'game_board#rooms'
   get 'rooms/:id' => 'game_board#find_room'
 
-  delete 'game_board' => 'game_board#destroy'
+  delete 'game_boards' => 'game_board#destroy'
 end
