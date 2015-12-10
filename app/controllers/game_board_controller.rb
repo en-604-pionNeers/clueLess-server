@@ -128,25 +128,33 @@ class GameBoardController < ApplicationController
       room = params[:location_id]
 
       results = []
-
-      location_id = $game.game_board.rooms.collect(:name == room).first.id
-
-      $game.get_players.each do |p|
+      
+      location_id = nil
+      
+      $game.game_board.rooms.collect{|k,v| v}.each do |r|
+        if r.name == room
+          location_id = r.id
+          break
+        end
+      end
+      
+      $game.get_players.collect { |k, v| v }.each do |p|
         #If this player is the one that is in the suggestion, move him to the room
-        if p.get_board_piece.name == suspect
-          @game.game_board.move_player(p, location_id)
+        if p.board_piece.name == suspect
+          $game.game_board.move_player(p, location_id)
         end
-
-        if p.get_cards[:weapon].name == weapon
-          results.push({:player => p, :card => weapon})
+        
+        result_cards = []
+        p.cards.each do |c|
+          #Why will this not work only for weapons!!!!
+          #result_cards.push("-" + c.name.to_s + "-==-" + weapon.to_s + "-=" + (c.name == weapon).to_s)
+          #returned "rope==rope=false"
+          if (c.name == weapon || c.name == suspect || c.name == room)
+            result_cards.push(c)  
+          end
         end
-
-        if p.get_cards[:suspect].name == suspect
-          results.push({:player => p, :card => suspect})
-        end
-
-        if p.get_cards[:room].name == room
-          results.push({:player => p, :card => room})
+        if result_cards.length > 0
+          results.push({:player => p, :cards => result_cards})
         end
       end
 
