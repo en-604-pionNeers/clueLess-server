@@ -32,9 +32,9 @@ class GameBoardController < ApplicationController
   # Get the current game board status
   def index
     if $game
-      render json: { board: $game.game_board}
+      render json: [{board: $game.game_board}]
     else
-      head :not_found
+      render json: []
     end
   end
 
