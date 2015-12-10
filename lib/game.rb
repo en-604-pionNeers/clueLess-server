@@ -57,7 +57,17 @@ class Game
   end
 
   def start_game
+    return if @game_in_play
+
+    # TODO figure out how to assign random cards.
+    @players.each do |player|
+      card = available_cards.random_card
+      break unless card
+
+      player.cards = player.cards + card
+    end
     @game_in_play = true
     @players[0].player_in_turn = true
   end
+
 end
