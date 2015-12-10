@@ -69,7 +69,7 @@ class GameBoardController < ApplicationController
   def add_player_to_game
     # TODO: Add in correct input to method for adding a player
     if !$game.game_in_play
-      $game.add_player(params[:name], params[:board_piece])
+      $game.add_player(params[:board_piece])
       render json: $game.get_players.collect { |k, v| v }
     else
       render json: {error: "Game play in progress. Cannot add a player."}, status: 400
