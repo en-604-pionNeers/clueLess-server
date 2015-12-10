@@ -10,6 +10,7 @@ class Game
   attr_accessor :game_board
   attr_accessor :game_in_play
   attr_accessor :available_cards
+  attr_accessor :id
 
   def initialize
     puts "Creating a new game"

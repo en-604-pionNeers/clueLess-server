@@ -47,9 +47,13 @@ class GameBoardController < ApplicationController
   end
 
   def get_player
-    id = params[:id]
+    id = params[:player_id]
     player = $game.get_player(id)
     render json: { player: player}
+  end
+  
+  def get_game
+    id = params[:id]
   end
 
   # Get which player is in turn
@@ -97,21 +101,57 @@ class GameBoardController < ApplicationController
   
   def make_accusation
     player = $game.get_player(params[:player_id])
+    weapon = params[:weapon_id]
+    suspect = params[:suspect_id]
+    room = params[:location_id]
+    
     if $game.game_in_play && player.player_in_turn
-      
-      
-      #Render if the player has won or if the player has lost
-      render json: { success: true}
+      if solution_set.weapon_card.name == weapon &&
+         solution_set.room_card.name == room &&
+         solution_set.suspectn_card.name == suspect 
+         #Render if the player has won 
+         render json: { success: true}
+         game
+       else
+         player.disabled = true
+         #Render if the player has lost
+         render json: { success: false}
+      end
     end
   end
   
   def make_suggestion
     player = $game.get_player(params[:player_id])
     if $game.game_in_play && player.player_in_turn
+      weapon = params[:weapon_id]
+      suspect = params[:suspect_id]
+      room = params[:location_id]
       
+      results = []
+      
+      location_id = $game.game_board.rooms.collect(:name == room).first.id
+      
+      $game.get_players.each do |p|
+        #If this player is the one that is in the suggestion, move him to the room
+        if p.get_board_piece.name == suspect
+          @game.game_board.move_player(p, location_id)
+        end
+        
+        if p.get_cards[:weapon].name == weapon
+          results.push({:player => p, :card => weapon})
+        end
+        
+        if p.get_cards[:suspect].name == suspect
+          results.push({:player => p, :card => suspect})
+        end
+        
+        if p.get_cards[:room].name == room
+          results.push({:player => p, :card => room})
+        end
+      end
       
       #Render the cards held by other players
-      render json: { success: true}
+      render json: { result: results }
     end
   end
   
