@@ -50,7 +50,6 @@ class Game
     end
   end
 
-  # TODO: Add in player in turn logic
   def player_in_turn
     @players.each do |key, player|
       return player if player.player_in_turn
@@ -71,7 +70,13 @@ class Game
           player.cards = player.cards.push(card)
       end
     end
-    
+
+    @players.each do |index, player|
+      player.location_id = game_board.rooms[index].id
+      game_board.rooms[index].occupy_location(player)
+      puts player.inspect
+    end
+
     @game_in_play = true
     @players[0].player_in_turn = true
   end

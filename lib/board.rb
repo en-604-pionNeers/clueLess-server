@@ -21,17 +21,13 @@ class Board
     location_id = Integer(location_id)
     if !@rooms[location_id].nil?
       room = @rooms[location_id]
-      if room.vacant
-        unoccupy(player.location_id) unless player.location_id.nil?
+        unoccupy(player, player.location_id) unless player.location_id.nil?
         player.location_id = location_id
         room.occupy_location(player)
-      else
-        return false
-      end
     else
       hall = @halls[location_id]
       if hall.vacant
-        unoccupy(player.location_id) unless player.location_id.nil?
+        unoccupy(player, player.location_id) unless player.location_id.nil?
         player.location_id = location_id
         @halls[location_id].occupy_location(player)
       else
@@ -41,12 +37,12 @@ class Board
     true
   end
 
-  def unoccupy(location_id)
+  def unoccupy(player, location_id)
     location_id = Integer(location_id)
     if !@rooms[location_id].nil?
-      @rooms[location_id].unoccupy_location
+      @rooms[location_id].unoccupy_location(player)
     else
-      @halls[location_id].unoccupy_location
+      @halls[location_id].unoccupy_location(player)
     end
   end
 

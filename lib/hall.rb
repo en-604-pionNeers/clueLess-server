@@ -4,7 +4,7 @@ class Hall < Location
 
   def initialize(name, id)
     @id = id
-    @player=nil
+    @players=[]
     @name=name
     @vacant=true
   end

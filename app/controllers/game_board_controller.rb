@@ -34,7 +34,7 @@ class GameBoardController < ApplicationController
     if $game
       game_map = $game.game_board.to_json_map
       game_map[:game_in_play] = $game.game_in_play
-      render json: [game_map]
+      render json: $game.game_board
     else
       render json: []
     end

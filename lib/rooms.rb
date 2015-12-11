@@ -8,7 +8,7 @@ class Room < Location
     @id = id
     @name = room[:name]
     @halls = room[:halls]
-    @player = nil
+    @players = []
     @secret_passage = room[:secret_passage]
     @vacant = true
   end
