@@ -39,6 +39,11 @@ ROOM_LAYOUT={
             name: 'kitchen',
             halls: ['dining_kitchen', 'ball_kitchen'],
             secret_passage: 'study'
+        },
+        {
+          name: 'hall',
+          halls: ['study_hall', 'hall_lounge'],
+          secret_passage: nil
         }
     ]
 }
