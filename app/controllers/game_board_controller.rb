@@ -32,7 +32,9 @@ class GameBoardController < ApplicationController
   # Get the current game board status
   def index
     if $game
-      render json: [$game.game_board.to_json_map]
+      game_map = $game.game_board.to_json_map
+      game_map[:game_in_play] = $game.game_in_play
+      render json: [game_map]
     else
       render json: []
     end
