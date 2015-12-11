@@ -49,17 +49,30 @@ must pass through json with the following:
 (note for above: independent of room / hall. use IDs specified in game board)
 
 # The player makes a accusation
+# Will return true if the game has been won and false if it has not
+{
+  "success": <bool>
+}
 POST /players/:player_id/accuse
 must pass through json with the following:
 {
-  "location": "<location_id>"
+  "room_id": "<room_name>",
+  "weapon_id": "<weapon_name>",
+  "suspect_id": "<suspect_name>"
 }
 
 # The player makes a suggestion
+# Will return the player object and the list of cards the player holds that matches the suggestion
+{
+  "player": <player>,
+  "cards": <cards> 
+}
 POST /players/:player_id/suggest
 must pass through json with the following:
 {
-  "location": "<location_id>"
+  "room_id": "<room_name>",
+  "weapon_id": "<weapon_name>",
+  "suspect_id": "<suspect_name>"
 }
 
 ```

@@ -22,8 +22,9 @@ class Game
     @solution_set = SolutionSet.new(@available_cards)
   end
 
-  def add_player(name, board_piece)
-    @players[@players.count] = (Player.new(name, @players.count, @available_cards, board_piece))
+  def add_player(board_piece)
+    return if @game_in_play
+    @players[@players.count] = (Player.new(@players.count, board_piece))
   end
 
   def get_player_count
@@ -58,14 +59,19 @@ class Game
 
   def start_game
     return if @game_in_play
-
-    # TODO figure out how to assign random cards.
-    @players.each do |player|
-      card = available_cards.random_card
-      break unless card
-
-      player.cards = player.cards + card
+    
+    #Distribute remaining cards
+    while @available_cards.card_list.length > 0 do
+      if @players.length == 0
+        break
+      end
+      @players.each do |key, player|
+          card = @available_cards.random_card
+          break unless card
+          player.cards = player.cards.push(card)
+      end
     end
+    
     @game_in_play = true
     @players[0].player_in_turn = true
   end
