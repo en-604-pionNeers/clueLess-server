@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get 'players' => 'game_board#players'
   get 'players/:player_id' => 'game_board#get_player'
   get 'player_in_turn' => 'game_board#get_player_in_turn'
-  get 'cards' => 'game_board#available_cards'
+  get 'cards' => 'game_board#cards'
   get 'halls' => 'game_board#halls'
   get 'rooms' => 'game_board#rooms'
   get 'weapon_cards' => 'game_board#weapon_cards'

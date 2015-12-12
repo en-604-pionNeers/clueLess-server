@@ -19,8 +19,12 @@ class GameBoardController < ApplicationController
     head :no_content
   end
 
-  def available_cards
-    render json: $game.available_cards
+  def cards
+    #Initialize a map of each card type.
+    cards = {:weapons => $game.available_cards.available_cards[:weapons],
+             :suspects => $game.available_cards.available_cards[:suspects],
+             :rooms => $game.available_cards.available_cards[:rooms]}
+    render json: cards
   end
 
   # Start the game
