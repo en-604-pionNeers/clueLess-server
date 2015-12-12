@@ -47,7 +47,15 @@ class GameBoardController < ApplicationController
   def rooms
     render json: $game.game_board.rooms.collect{|k,v| v}
   end
-
+  
+  def weapons 
+     render json: $game.available_cards.available_cards[:weapons]
+  end
+  
+  def suspects
+    render json: $game.available_cards.available_cards[:suspects]
+  end
+  
   def get_player
     id = params[:player_id]
     player = $game.get_player(id)
@@ -81,12 +89,15 @@ class GameBoardController < ApplicationController
   # Let a player make a move
   def make_move
     player = $game.get_player(params[:player_id])
+    location_id = params[:location_id]
+    puts "LOCATION" + location_id
     valid_move = nil
     error = nil
     if $game.game_in_play && player.player_in_turn
-      valid_move = $game.game_board.move_player(player, params[:location_id])
+      valid_move = $game.game_board.move_player(player, location_id)
       if valid_move
-        $game.update_player_in_turn(params[:player_id])
+        #Move does not end game
+        #$game.update_player_in_turn(player)
         # TODO ==== ADD *CHECK BOARD LOGIC* FOR WINNER HERE
       else
         error = "Invalid move. Room not available."
@@ -117,10 +128,10 @@ class GameBoardController < ApplicationController
         $game.solution_set.room_card.name.to_s == room &&
         $game.solution_set.suspect_card.name.to_s == suspect
         #Render if the player has won
-        $game = nil
         render json: {success: true}
       else
         player.disabled = true
+        game.update_player_in_turn(player.id)
         #Render if the player has lost
         render json: {success: false}
       end
@@ -161,7 +172,7 @@ class GameBoardController < ApplicationController
           results.push({:player => p, :cards => result_cards})
         end
       end
-
+      game.update_player_in_turn(player.id)
       #Render the cards held by other players
       render json: results
     end

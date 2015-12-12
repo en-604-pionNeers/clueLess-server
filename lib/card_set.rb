@@ -37,9 +37,6 @@ class CardSet
   def random_card
     card = @card_list.sample
     @card_list.delete(card)
-    @available_cards[:weapons].delete(card)
-    @available_cards[:suspects].delete(card)
-    @available_cards[:rooms].delete(card)
     return card
   end
 
@@ -47,20 +44,17 @@ class CardSet
   def random_weapon_card
     card = available_cards[:weapons].sample
     @card_list.delete(card)
-    @available_cards[:weapons].delete(card)
   end
 
   #Retrieve a random suspect card and remove it from the weapon map
   def random_suspect_card
     card = available_cards[:suspects].sample
     @card_list.delete(card)
-    @available_cards[:suspects].delete(card)
   end
 
   #Retrieve a random room card and remove it from the weapon map
   def random_room_card
     card = available_cards[:rooms].sample
     @card_list.delete(card)
-    @available_cards[:rooms].delete(card)
   end
 end

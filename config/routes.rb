@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   get 'cards' => 'game_board#available_cards'
   get 'halls' => 'game_board#halls'
   get 'rooms' => 'game_board#rooms'
+  get 'weapons' => 'game_board#weapons'
+  get 'suspects' => 'game_board#suspects'
   get 'rooms/:id' => 'game_board#find_room'
 
   delete 'game_boards' => 'game_board#destroy'
