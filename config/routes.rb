@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post 'players/:player_id/move' => 'game_board#make_move'
   post 'players/:player_id/suggest' => 'game_board#make_suggestion'
   post 'players/:player_id/accuse' => 'game_board#make_accusation'
+  post 'players/:player_id/end_turn' => 'game_board#end_turn'
   post 'players' => 'game_board#add_player_to_game'
 
   get 'players/count' => 'game_board#get_num_player'

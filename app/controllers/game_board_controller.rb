@@ -69,6 +69,18 @@ class GameBoardController < ApplicationController
     player = $game.get_player(id)
     render json: player
   end
+  
+  def end_turn
+    id = params[:player_id]
+    player = $game.get_player(id)
+    if player.player_in_turn
+      $game.update_player_in_turn(id)
+      render json: {success: true}
+    else
+      error = "It is not the player's turn."
+      render json: {error: error}, status: 400
+    end
+  end
 
   def get_game
     id = params[:id]
@@ -180,7 +192,6 @@ class GameBoardController < ApplicationController
           results.push({:player => p, :cards => result_cards})
         end
       end
-      game.update_player_in_turn(player.id)
       #Render the cards held by other players
       render json: results
     end
