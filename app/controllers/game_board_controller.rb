@@ -110,7 +110,6 @@ class GameBoardController < ApplicationController
   def make_move
     player = $game.get_player(params[:player_id])
     location_id = params[:location_id]
-    puts "LOCATION" + location_id
     valid_move = nil
     error = nil
     if $game.game_in_play && player.player_in_turn
