@@ -48,12 +48,16 @@ class GameBoardController < ApplicationController
     render json: $game.game_board.rooms.collect{|k,v| v}
   end
   
-  def weapons 
+  def weapon_cards
      render json: $game.available_cards.available_cards[:weapons]
   end
   
-  def suspects
+  def suspect_cards
     render json: $game.available_cards.available_cards[:suspects]
+  end
+  
+  def location_cards
+    render json: $game.available_cards.available_cards[:rooms]
   end
   
   def get_player
