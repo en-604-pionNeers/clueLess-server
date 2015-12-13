@@ -71,14 +71,23 @@ class Game
       end
     end
 
+    scarlet = false
     @players.each do |index, player|
-      player.location_id = game_board.rooms[index].id
-      game_board.rooms[index].occupy_location(player)
+      player_name = player.board_piece.character_name.to_s
+      player.location_id = PLAYER_PIECES_START[player_name]
+      @game_board.halls[player.location_id].occupy_location(player)
       puts player.inspect
+      
+      if player_name == PLAYER_PIECES[0]
+        scarlet = true
+        @players[index].player_in_turn = true
+      end
     end
-
+    if scarlet == false
+      @players[0].player_in_turn = true
+    end
     @game_in_play = true
-    @players[0].player_in_turn = true
+    
   end
 
 end

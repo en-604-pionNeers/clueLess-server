@@ -8,6 +8,7 @@ class Player < BoardAction
   attr_accessor :board_piece
   attr_accessor :location_id
   attr_accessor :player_in_turn
+  attr_accessor :previous_moves
 
   def initialize(id, character_name)
     @id = id
@@ -16,5 +17,6 @@ class Player < BoardAction
     @board_piece = BoardPiece.new(character_name)
     @location_id = nil
     @player_in_turn = false
+    @previous_moves = []
   end
 end
