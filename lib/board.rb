@@ -9,7 +9,7 @@ class Board
   def initialize
     @rooms = {}
     ROOM_LAYOUT[:rooms].each do |room|
-      @rooms[room[:id]] = Room.new(room)
+      @rooms[Integer(room[:id])] = Room.new(room)
     end
     @halls = {}
     HALLS.each do |hall|

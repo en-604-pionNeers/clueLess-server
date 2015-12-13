@@ -9,7 +9,7 @@ class Room < Location
     @name = room[:name]
     @halls = room[:halls]
     @players = []
-    @secret_passage = room[:secret_passage]
+    @secret_passage = room[:secret_passage].nil? ? nil : Integer(room[:secret_passage])
     @vacant = true
   end
 end
