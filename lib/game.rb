@@ -11,6 +11,9 @@ class Game
   attr_accessor :game_in_play
   attr_accessor :available_cards
   attr_accessor :id
+  attr_accessor :awaiting_suggest_response
+  attr_accessor :suggestion
+  attr_accessor :suggest_response
 
   def initialize
     puts "Creating a new game"
@@ -20,6 +23,7 @@ class Game
     @game_in_play = false
     @available_cards = CardSet.new
     @solution_set = SolutionSet.new(@available_cards)
+    @awaiting_suggest_response = false
   end
 
   def add_player(board_piece)
@@ -45,8 +49,10 @@ class Game
     player.player_in_turn = false
     if @players[Integer(id) + 1]
       @players[Integer(id) + 1].player_in_turn = true
+      @players[Integer(id) + 1].previous_moves = []
     else
       @players[0].player_in_turn = true
+      @players[0].previous_moves = []
     end
   end
 
@@ -73,7 +79,7 @@ class Game
 
     scarlet = false
     @players.each do |index, player|
-      player_name = player.board_piece.character_name.to_s
+      player_name = player.board_piece.item_name.to_s
       player.location_id = PLAYER_PIECES_START[player_name]
       @game_board.halls[player.location_id].occupy_location(player)
       puts player.inspect

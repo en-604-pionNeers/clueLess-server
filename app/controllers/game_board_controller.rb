@@ -29,8 +29,13 @@ class GameBoardController < ApplicationController
 
   # Start the game
   def start_game
-    $game.start_game
-    render json: {success: true}
+    if !$game.game_in_play
+      $game.start_game
+      render json: {success: true}
+    else
+      error = "Game already in play!"
+      render json: {error: error}, status: 400
+    end
   end
 
   # Get the current game board status
@@ -38,6 +43,25 @@ class GameBoardController < ApplicationController
     if $game
       game_map = $game.game_board.to_json_map
       game_map[:game_in_play] = $game.game_in_play
+      game_map[:awaiting_suggest_response] = $game.awaiting_suggest_response
+      game_map[:suggestion] = $game.suggestion
+      game_map[:suggest_response] = $game.suggestion
+      render json: [game_map]
+    else
+      render json: []
+    end
+  end
+  
+    # Get the current game board status
+  def updates
+    if $game
+      game_map = {}
+      game_map[:board] = $game.game_board.to_json_map
+      game_map[:game_in_play] = $game.game_in_play
+      game_map[:awaiting_suggest_response] = $game.awaiting_suggest_response
+      game_map[:suggestion] = $game.suggestion
+      game_map[:suggest_response] = $game.suggest_response
+      game_map[:players] = $game.players
       render json: [game_map]
     else
       render json: []
@@ -75,6 +99,8 @@ class GameBoardController < ApplicationController
     player = $game.get_player(id)
     if player.player_in_turn
       $game.update_player_in_turn(id)
+      $game.suggest_response = nil
+      $game.suggestion = nil
       render json: {success: true}
     else
       error = "It is not the player's turn."
@@ -109,6 +135,7 @@ class GameBoardController < ApplicationController
   # Let a player make a move
   def make_move
     player = $game.get_player(params[:player_id])
+    previous = player.location_id
     location_id = params[:location_id]
     valid_move = nil
     error = nil
@@ -126,6 +153,7 @@ class GameBoardController < ApplicationController
     end
     if valid_move
       render json: {success: true}
+      player.previous_moves.push({ :player => player.id, :move => "move", :status => {:from => previous, :to => location_id}})
     else
       render json: {error: error}, status: 400
     end
@@ -156,6 +184,19 @@ class GameBoardController < ApplicationController
       end
     end
   end
+  
+  def answer_suggestion
+    card_id = params[:card_id]
+    player = $game.get_player(params[:player_id])
+    if player.id == $game.suggestion[:player].id
+      $game.suggest_response = card_id
+      $game.awaiting_suggest_response = false
+      $game.suggestion = nil
+      render json: {success: true}
+    else
+      render json: {success: false}
+    end
+  end
 
   def make_suggestion
     player = $game.get_player(params[:player_id])
@@ -175,7 +216,11 @@ class GameBoardController < ApplicationController
         end
       end
       
-      $game.get_players.collect { |k, v| v }.each do |p|
+      playerlist = []
+      playerlist.push(*$game.get_players.collect { |k, v| v }[Integer(player.id)..10])
+      playerlist.push(*$game.get_players.collect { |k, v| v }[0..Integer(player.id - 1)])
+
+      playerlist.each do |p|
         #If this player is the one that is in the suggestion, move him to the room
         if p.board_piece.name == suspect
           $game.game_board.move_player(p, location_id)
@@ -185,15 +230,24 @@ class GameBoardController < ApplicationController
         p.cards.each do |c|
           if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
             result_cards.push(c)  
+            $game.awaiting_suggest_response = true
           end
         end
         if result_cards.length > 0
-          results.push({:player => p, :cards => result_cards})
+          results = {:player => p, :cards => result_cards}
+          $game.suggestion = results
+          break
         end
       end
+      player.previous_moves.push({ :player => player.id, :move => "suggest", :status => {:cards => [weapon,suspect,room]}})
       #Render the cards held by other players
       render json: results
     end
+  end
+  
+  def suggested_cards
+    player = $game.player_in_turn
+    render json: {:suggestion => $game.suggestion, :from => player}
   end
 
   # Get the number of players
