@@ -226,17 +226,19 @@ class GameBoardController < ApplicationController
           $game.game_board.move_player(p, location_id)
         end
         
-        result_cards = []
-        p.cards.each do |c|
-          if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
-            result_cards.push(c)  
-            $game.awaiting_suggest_response = true
+        if !p.disabled
+          result_cards = []
+          p.cards.each do |c|
+            if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
+              result_cards.push(c)  
+              $game.awaiting_suggest_response = true
+            end
           end
-        end
-        if result_cards.length > 0
-          results = {:player => p, :cards => result_cards}
-          $game.suggestion = results
-          break
+          if result_cards.length > 0
+            results = {:player => p, :cards => result_cards}
+            $game.suggestion = results
+            break
+          end
         end
       end
       player.previous_moves.push({ :player => player.id, :move => "suggest", :status => {:cards => [weapon,suspect,room]}})
