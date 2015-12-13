@@ -166,11 +166,6 @@ class GameBoardController < ApplicationController
     room = params[:location_id]
 
     if $game.game_in_play && player.player_in_turn
-      
-      puts($game.solution_set.weapon_card.name.to_s)
-      puts($game.solution_set.room_card.name.to_s)
-      puts($game.solution_set.suspect_card.name.to_s)
-      
       if $game.solution_set.weapon_card.name.to_s == weapon &&
         $game.solution_set.room_card.name.to_s == room &&
         $game.solution_set.suspect_card.name.to_s == suspect
@@ -188,8 +183,22 @@ class GameBoardController < ApplicationController
   def answer_suggestion
     card_id = params[:card_id]
     player = $game.get_player(params[:player_id])
+    card = nil
     if player.id == $game.suggestion[:player].id
-      $game.suggest_response = {:card => card_id, :player => player}
+      
+      #Has to be an easier way to do this
+      card_list = []
+      card_list.push(*$game.available_cards.available_cards[:weapons])
+      card_list.push(*$game.available_cards.available_cards[:suspects])
+      card_list.push(*$game.available_cards.available_cards[:rooms])
+      
+      card_list.each do |c|
+        if c.name.to_s == card_id
+          card = c
+          break
+        end 
+      end
+      $game.suggest_response = {:card => card, :player => player}
       $game.awaiting_suggest_response = false
       $game.suggestion = nil
       render json: {success: true}
