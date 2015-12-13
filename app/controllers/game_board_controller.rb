@@ -61,7 +61,7 @@ class GameBoardController < ApplicationController
       game_map[:awaiting_suggest_response] = $game.awaiting_suggest_response
       game_map[:suggestion] = $game.suggestion
       game_map[:suggest_response] = $game.suggest_response
-      game_map[:players] = $game.players
+      game_map[:players] = $game.players.collect{|k,v| v}
       render json: [game_map]
     else
       render json: []
