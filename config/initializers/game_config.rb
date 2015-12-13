@@ -81,3 +81,12 @@ PLAYER_PIECES=[
     'Mrs. Elizabeth Peacock',
     'Professor Peter Plum'
 ]
+
+PLAYER_PIECES_START={
+    'Ms. Vivienne Scarlet' => 18,
+    'Col. Michael Mustard' => 19,
+    'Mrs. Blanche White' => 17,
+    'Rev. Jonathon Green' => 13,
+    'Mrs. Elizabeth Peacock' => 12,
+    'Professor Peter Plum' => 10
+}
