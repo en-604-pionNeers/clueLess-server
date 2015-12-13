@@ -45,8 +45,10 @@ class Game
     player.player_in_turn = false
     if @players[Integer(id) + 1]
       @players[Integer(id) + 1].player_in_turn = true
+      @players[Integer(id) + 1].previous_moves = []
     else
       @players[0].player_in_turn = true
+      @players[0].previous_moves = []
     end
   end
 

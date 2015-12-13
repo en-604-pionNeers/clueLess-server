@@ -29,8 +29,13 @@ class GameBoardController < ApplicationController
 
   # Start the game
   def start_game
-    $game.start_game
-    render json: {success: true}
+    if !$game.game_in_play
+      $game.start_game
+      render json: {success: true}
+    else
+      error = "Game already in play!"
+      render json: {error: error}, status: 400
+    end
   end
 
   # Get the current game board status
@@ -109,6 +114,7 @@ class GameBoardController < ApplicationController
   # Let a player make a move
   def make_move
     player = $game.get_player(params[:player_id])
+    previous = player.location_id
     location_id = params[:location_id]
     valid_move = nil
     error = nil
@@ -126,6 +132,7 @@ class GameBoardController < ApplicationController
     end
     if valid_move
       render json: {success: true}
+      player.previous_moves.push({ :player => player.id, :move => "move", :status => {:from => previous, :to => location_id}})
     else
       render json: {error: error}, status: 400
     end
@@ -191,6 +198,7 @@ class GameBoardController < ApplicationController
           results.push({:player => p, :cards => result_cards})
         end
       end
+      player.previous_moves.push({ :player => player.id, :move => "suggest", :status => {:cards => [weapon,suspect,room]}})
       #Render the cards held by other players
       render json: results
     end
