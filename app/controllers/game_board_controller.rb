@@ -189,7 +189,7 @@ class GameBoardController < ApplicationController
     card_id = params[:card_id]
     player = $game.get_player(params[:player_id])
     if player.id == $game.suggestion[:player].id
-      $game.suggest_response = card_id
+      $game.suggest_response = {:card => card_id, :player => player}
       $game.awaiting_suggest_response = false
       $game.suggestion = nil
       render json: {success: true}
