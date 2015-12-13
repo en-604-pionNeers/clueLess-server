@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   post 'players' => 'game_board#add_player_to_game'
 
   get 'players/count' => 'game_board#get_num_player'
-  get 'game_boards' => 'game_board#index'
+  get 'game_boards' => 'game_board#updates'
   get 'game_boards/updates' => 'game_board#updates'
   get 'game_boards/:game_id' => 'game_board#get_game'
   get 'players' => 'game_board#players'
