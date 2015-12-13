@@ -178,7 +178,7 @@ class GameBoardController < ApplicationController
         render json: {success: true}
       else
         player.disabled = true
-        game.update_player_in_turn(player.id)
+        $game.update_player_in_turn(player.id)
         #Render if the player has lost
         render json: {success: false}
       end
@@ -226,7 +226,7 @@ class GameBoardController < ApplicationController
           $game.game_board.move_player(p, location_id)
         end
         
-        if !p.disabled
+        if !p.disabled && p.id != player.id
           result_cards = []
           p.cards.each do |c|
             if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
