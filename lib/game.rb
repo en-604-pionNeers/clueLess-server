@@ -13,6 +13,7 @@ class Game
   attr_accessor :id
   attr_accessor :awaiting_suggest_response
   attr_accessor :suggestion
+  attr_accessor :accusation
   attr_accessor :suggest_response
   attr_accessor :winner
 

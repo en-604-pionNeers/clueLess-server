@@ -64,6 +64,7 @@ class GameBoardController < ApplicationController
       game_map[:awaiting_suggest_response] = $game.awaiting_suggest_response
       game_map[:suggestion] = $game.suggestion
       game_map[:suggest_response] = $game.suggest_response
+      game_map[:accusation] = $game.accusation
       game_map[:players] = $game.players.collect{|k,v| v}
       game_map[:winner] = $game.winner
       render json: [game_map]
@@ -113,6 +114,7 @@ class GameBoardController < ApplicationController
       $game.update_player_in_turn(id)
       $game.suggest_response = nil
       $game.suggestion = nil
+      $game.accusation = nil
       render json: {success: true}
     else
       error = "It is not the player's turn."
@@ -177,6 +179,22 @@ class GameBoardController < ApplicationController
     suspect = params[:suspect_id]
     room = params[:location_id]
 
+    result_cards = []
+    card_list = []
+    card_list.push(*$game.available_cards.available_cards[:weapons])
+    card_list.push(*$game.available_cards.available_cards[:suspects])
+    card_list.push(*$game.available_cards.available_cards[:rooms])
+    
+    card_list.each do |c|
+      if(c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
+        result_cards.push(c)
+      end
+    end
+    
+    results = {:cards => result_cards, :from => player}
+    
+    $game.accusation = results
+
     if $game.game_in_play && player.player_in_turn
       if $game.solution_set.weapon_card.name.to_s == weapon &&
         $game.solution_set.room_card.name.to_s == room &&
@@ -200,6 +218,8 @@ class GameBoardController < ApplicationController
           $game.winner = player_list[0]
         else
           $game.update_player_in_turn(player.id)
+          $game.suggest_response = nil
+          $game.suggestion = nil
         end
         
         #Render if the player has lost
