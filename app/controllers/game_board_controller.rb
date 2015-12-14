@@ -169,6 +169,8 @@ class GameBoardController < ApplicationController
       if $game.solution_set.weapon_card.name.to_s == weapon &&
         $game.solution_set.room_card.name.to_s == room &&
         $game.solution_set.suspect_card.name.to_s == suspect
+        # Set game in play to false.
+        $game.game_in_play = false
         #Render if the player has won
         render json: {success: true}
       else
