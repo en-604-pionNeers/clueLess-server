@@ -256,7 +256,19 @@ class GameBoardController < ApplicationController
       playerlist = []
       playerlist.push(*$game.get_players.collect { |k, v| v }[Integer(player.id)..10])
       playerlist.push(*$game.get_players.collect { |k, v| v }[0..Integer(player.id - 1)])
-
+      
+      result_cards = []
+      card_list = []
+      card_list.push(*$game.available_cards.available_cards[:weapons])
+      card_list.push(*$game.available_cards.available_cards[:suspects])
+      card_list.push(*$game.available_cards.available_cards[:rooms])
+      
+      card_list.each do |c|
+        if(c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
+          result_cards.push(c)
+        end
+      end
+      results = {:player => nil, :cards => result_cards, :from => player}
       playerlist.each do |p|
         #If this player is the one that is in the suggestion, move him to the room
         if p.board_piece.name == suspect
@@ -264,32 +276,16 @@ class GameBoardController < ApplicationController
         end
         
         if !p.disabled && p.id != player.id
-          result_cards = []
-          has_card = false
           p.cards.each do |c|
             if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
-              has_card = true
               $game.awaiting_suggest_response = true
+              results[:player] = p
+              break
             end
-          end
-          
-          if(has_card)
-            card_list = []
-            card_list.push(*$game.available_cards.available_cards[:weapons])
-            card_list.push(*$game.available_cards.available_cards[:suspects])
-            card_list.push(*$game.available_cards.available_cards[:rooms])
-            
-            card_list.each do |c|
-              if(c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
-                result_cards.push(c)
-              end
-            end
-            results = {:player => p, :cards => result_cards}
-            $game.suggestion = results
-            break
           end
         end
       end
+      $game.suggestion = results
       player.previous_moves.push({ :player => player.id, :move => "suggest", :status => {:cards => [weapon,suspect,room]}})
       #Render the cards held by other players
       render json: results
