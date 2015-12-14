@@ -31,6 +31,9 @@ class GameBoardController < ApplicationController
   def start_game
     if !$game.game_in_play
       $game.start_game
+      puts $game.solution_set.weapon_card.name
+      puts $game.solution_set.suspect_card.name
+      puts $game.solution_set.room_card.name
       render json: {success: true}
     else
       error = "Game already in play!"
@@ -62,6 +65,7 @@ class GameBoardController < ApplicationController
       game_map[:suggestion] = $game.suggestion
       game_map[:suggest_response] = $game.suggest_response
       game_map[:players] = $game.players.collect{|k,v| v}
+      game_map[:winner] = $game.winner
       render json: [game_map]
     else
       render json: []
@@ -86,6 +90,14 @@ class GameBoardController < ApplicationController
   
   def location_cards
     render json: $game.available_cards.available_cards[:rooms]
+  end
+  
+  def solution_set
+    solution = []
+    solution.push($game.solution_set.weapon_card)
+    solution.push($game.solution_set.suspect_card)
+    solution.push($game.solution_set.room_card)
+    render json: solution
   end
   
   def get_player
@@ -169,13 +181,27 @@ class GameBoardController < ApplicationController
       if $game.solution_set.weapon_card.name.to_s == weapon &&
         $game.solution_set.room_card.name.to_s == room &&
         $game.solution_set.suspect_card.name.to_s == suspect
-        # Set game in play to false.
-        $game.game_in_play = false
         #Render if the player has won
+        $game.game_in_play = false
+        $game.winner = player
         render json: {success: true}
       else
         player.disabled = true
-        $game.update_player_in_turn(player.id)
+        
+        player_list = $game.get_players.collect { |k, v| v }
+        player_list.delete(player)
+        player_list.each do |p|
+          if p.disabled
+            player_list.delete(p)
+          end
+        end
+        if player_list.count == 1
+          $game.game_in_play = false
+          $game.winner = player_list[0]
+        else
+          $game.update_player_in_turn(player.id)
+        end
+        
         #Render if the player has lost
         render json: {success: false}
       end
