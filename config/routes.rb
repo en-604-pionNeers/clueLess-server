@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   get 'players/count' => 'game_board#get_num_player'
   get 'game_boards' => 'game_board#updates'
   get 'game_boards/updates' => 'game_board#updates'
-  get 'game_boards/:game_id' => 'game_board#get_game'
   get 'players' => 'game_board#players'
   get 'players/:player_id' => 'game_board#get_player'
   get 'player_in_turn' => 'game_board#get_player_in_turn'
@@ -24,9 +23,7 @@ Rails.application.routes.draw do
   get 'cards' => 'game_board#cards'
   get 'halls' => 'game_board#halls'
   get 'rooms' => 'game_board#rooms'
-  get 'weapon_cards' => 'game_board#weapon_cards'
-  get 'suspect_cards' => 'game_board#suspect_cards'
-  get 'location_cards' => 'game_board#location_cards'
+  get 'game_boards/solution_set' => 'game_board#solution_set'
   get 'rooms/:id' => 'game_board#find_room'
 
   delete 'game_boards' => 'game_board#destroy'
