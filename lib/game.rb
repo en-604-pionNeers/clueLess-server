@@ -14,6 +14,7 @@ class Game
   attr_accessor :awaiting_suggest_response
   attr_accessor :suggestion
   attr_accessor :suggest_response
+  attr_accessor :winner
 
   def initialize
     puts "Creating a new game"
@@ -82,7 +83,6 @@ class Game
       player_name = player.board_piece.item_name.to_s
       player.location_id = PLAYER_PIECES_START[player_name]
       @game_board.halls[player.location_id].occupy_location(player)
-      puts player.inspect
       
       if player_name == PLAYER_PIECES[0]
         scarlet = true
