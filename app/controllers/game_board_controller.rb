@@ -265,13 +265,25 @@ class GameBoardController < ApplicationController
         
         if !p.disabled && p.id != player.id
           result_cards = []
+          has_card = false
           p.cards.each do |c|
             if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
-              result_cards.push(c)  
+              has_card = true
               $game.awaiting_suggest_response = true
             end
           end
-          if result_cards.length > 0
+          
+          if(has_card)
+            card_list = []
+            card_list.push(*$game.available_cards.available_cards[:weapons])
+            card_list.push(*$game.available_cards.available_cards[:suspects])
+            card_list.push(*$game.available_cards.available_cards[:rooms])
+            
+            card_list.each do |c|
+              if(c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
+                result_cards.push(c)
+              end
+            end
             results = {:player => p, :cards => result_cards}
             $game.suggestion = results
             break
