@@ -48,12 +48,32 @@ class Game
   def update_player_in_turn(id)
     player = get_player(id)
     player.player_in_turn = false
-    if @players[Integer(id) + 1]
-      @players[Integer(id) + 1].player_in_turn = true
-      @players[Integer(id) + 1].previous_moves = []
-    else
-      @players[0].player_in_turn = true
-      @players[0].previous_moves = []
+    found_next = false
+    
+    @players.collect{ |k, v| v}[(Integer(id) + 1)..10].each do |p|
+      if p
+        if !p.disabled
+          found_next = true
+          p.player_in_turn = true
+          break
+        end
+      end
+    end
+    if !found_next
+      @players.collect{ |k, v| v}[0..(Integer(id) - 1)].each do |p|
+        if p
+          if !p.disabled
+            found_next = true
+            p.player_in_turn = true
+            break
+          end
+        end
+      end
+    end
+    
+    if !found_next
+      @winner = player
+      @game_in_play = false
     end
   end
 
