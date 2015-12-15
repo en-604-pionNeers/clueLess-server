@@ -295,7 +295,7 @@ class GameBoardController < ApplicationController
           $game.game_board.move_player(p, location_id)
         end
         
-        if !p.disabled && p.id != player.id
+        if p.id != player.id
           p.cards.each do |c|
             if (c.name.to_s == weapon || c.name.to_s == suspect || c.name.to_s == room)
               $game.awaiting_suggest_response = true
